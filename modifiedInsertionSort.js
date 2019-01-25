@@ -9,8 +9,7 @@ const correctIndex = (partiallySortedArray, element, sizeOfArray, h, t) => {
     currentIndex = (h+i)%sizeOfArray;
     let nextIndex = (h+i+1) % sizeOfArray;
     if (partiallySortedArray[currentIndex] < element && partiallySortedArray[nextIndex] > element) {
-      return (currentIndex+1)%sizeOfArray;
-      break;
+      return nextIndex;
     }
   }
 };
@@ -64,6 +63,7 @@ const modifiedInsertionSort = (inputArray) => {
       if (s<l) {
         // shifting all the smaller elements
         let currentIndex = (h-1+inputArraySize)%inputArraySize;
+        insertIndex = (insertIndex-1+inputArraySize)%inputArraySize;
         while(currentIndex!==insertIndex){
           let nextIndex = (currentIndex+1)%inputArraySize;
           y[currentIndex] = y[nextIndex];
@@ -80,12 +80,12 @@ const modifiedInsertionSort = (inputArray) => {
           currentIndex=previousIndex;
         }
         y[insertIndex] = temp;
-        h = (t+1+inputArraySize)%inputArraySize;
+        t = (t+1+inputArraySize)%inputArraySize;
       }
     }
     console.log(y);
   }
   return y;
 };
-//modifiedInsertionSort([91,81,71,61,51,41,31,21,11]);
+//modifiedInsertionSort([9, 50, 45, 47, 46, 100, 10, 2, 80, 60]);
 module.exports = modifiedInsertionSort;
