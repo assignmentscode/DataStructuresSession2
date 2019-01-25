@@ -9,11 +9,29 @@ const correctIndex = (partiallySortedArray, element, sizeOfArray, h, t) => {
     currentIndex = (h+i)%sizeOfArray;
     let nextIndex = (h+i+1) % sizeOfArray;
     if (partiallySortedArray[currentIndex] < element && partiallySortedArray[nextIndex] > element) {
-      return currentIndex;
+      return (currentIndex+1)%sizeOfArray;
       break;
     }
   }
 };
+const numberOfSmallerElements = (partiallySortedArray, insertIndex, sizeOfArray) => {
+  let s = 0;
+  let currentIndex = (insertIndex-1+sizeOfArray)%sizeOfArray;
+  while (partiallySortedArray[currentIndex]!== -1) {
+    s += 1;
+    currentIndex = (currentIndex-1+sizeOfArray)%sizeOfArray;
+  }
+  return s;
+}
+const numberOfLargerElements = (partiallySortedArray, insertIndex, sizeOfArray) => {
+  let l = 0;
+  let currentIndex = insertIndex;
+  while (partiallySortedArray[currentIndex]!== -1) {
+    l += 1;
+    currentIndex = (currentIndex+1+sizeOfArray)%sizeOfArray;
+  }
+  return l;
+}
 const modifiedInsertionSort = (inputArray) => {
   const inputArraySize = inputArray[0];
   if (inputArraySize < 2) {
@@ -41,7 +59,29 @@ const modifiedInsertionSort = (inputArray) => {
       y[insertIndex] = temp;
       t = (t+1)%inputArraySize;
     } else {
-
+      let s = numberOfSmallerElements(y, insertIndex, inputArraySize);
+      let l = numberOfLargerElements(y, insertIndex, inputArraySize);
+      if (s<l) {
+        // shifting all the smaller elements
+        let currentIndex = (h-1+inputArraySize)%inputArraySize;
+        while(currentIndex!==insertIndex){
+          let nextIndex = (currentIndex+1)%inputArraySize;
+          y[currentIndex] = y[nextIndex];
+          currentIndex=nextIndex;
+        }
+        y[insertIndex] = temp;
+        h = (h-1+inputArraySize)%inputArraySize;
+      } else {
+        // shifting all the larger elements
+        let currentIndex = (t+1+inputArraySize)%inputArraySize;
+        while(currentIndex!==insertIndex){
+          let previousIndex = (currentIndex-1+inputArraySize)%inputArraySize;
+          y[currentIndex] = y[previousIndex];
+          currentIndex=previousIndex;
+        }
+        y[insertIndex] = temp;
+        h = (t+1+inputArraySize)%inputArraySize;
+      }
     }
     console.log(y);
   }
